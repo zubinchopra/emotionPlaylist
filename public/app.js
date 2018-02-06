@@ -8,6 +8,7 @@ let happiness = document.getElementById('happiness');
 let neutral = document.getElementById('neutral');
 let sadness = document.getElementById('sadness');
 let surprise = document.getElementById('surprise');
+let imageContainer = document.getElementsByClassName('image-container')[0];
 
 imageForm.addEventListener('submit', (e) => {
     
@@ -16,6 +17,7 @@ imageForm.addEventListener('submit', (e) => {
     let query = image.value;
     let key = '458012e763f04e389f276918ec9d707b';
     let uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
+    imageContainer.style.backgroundImage = "url(" + query + ")"
 
     let params = {
         'returnFaceAttributes': 'gender,emotion'
@@ -51,6 +53,8 @@ imageForm.addEventListener('submit', (e) => {
     })
     .fail((jqXHR, textStatus, errorThrown) => {
         console.log(errorThrown);
+        console.log(textStatus);
+        console.log(jqXHR);
     });
 
 });
