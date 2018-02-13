@@ -10,10 +10,23 @@ let sadness = document.getElementById('sadness');
 let surprise = document.getElementById('surprise');
 let imageContainer = document.getElementsByClassName('image-container')[0];
 
-imageForm.addEventListener('submit', (e) => {
+let findMax = data => {
+    let max = 0;
+    let genre = "happiness";
+    let list = data[0].faceAttributes.emotion;
+    for (let emotion in list) {
+        if(list[emotion] > max) {
+            max = list[emotion];
+            genre = emotion;
+        }
+    };
+    console.log(genre);
+}
+
+imageForm.addEventListener('submit', e => {
     
     e.preventDefault();
-    
+
     let query = image.value;
     let key = '458012e763f04e389f276918ec9d707b';
     let uriBase = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect';
@@ -22,8 +35,6 @@ imageForm.addEventListener('submit', (e) => {
     let params = {
         'returnFaceAttributes': 'gender,emotion'
     };
-
-    console.log($.param(params));
 
     $.ajax({
         
@@ -42,6 +53,7 @@ imageForm.addEventListener('submit', (e) => {
 
     })
     .done(data => {
+        let emotion = data[0].faceAttributes.emotion;
         anger.innerHTML = data[0].faceAttributes.emotion.anger;
         contempt.innerHTML = data[0].faceAttributes.emotion.contempt;
         disgust.innerHTML = data[0].faceAttributes.emotion.disgust;
@@ -50,6 +62,7 @@ imageForm.addEventListener('submit', (e) => {
         neutral.innerHTML = data[0].faceAttributes.emotion.neutral;
         sadness.innerHTML = data[0].faceAttributes.emotion.sadness;
         surprise.innerHTML = data[0].faceAttributes.emotion.surprise;
+        findMax(data);
     })
     .fail((jqXHR, textStatus, errorThrown) => {
         console.log(errorThrown);
