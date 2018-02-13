@@ -20,7 +20,15 @@ let findMax = data => {
             genre = emotion;
         }
     };
-    console.log(genre);
+
+    let query = encodeURIComponent(genre);
+    fetch('/api/spotify?q=' + query)
+    .then(response => {
+        return response.json();
+    })
+    .then(json => {
+        console.log(json);
+    });
 }
 
 imageForm.addEventListener('submit', e => {
