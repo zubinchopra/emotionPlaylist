@@ -10,6 +10,27 @@ let sadness = document.getElementById('sadness');
 let surprise = document.getElementById('surprise');
 let imageContainer = document.getElementsByClassName('image-container')[0];
 
+let findMax = (data) => {
+    let max = 0;
+    let genre = "happiness";
+    let list = data[0].faceAttributes.emotion;
+    for (let emotion in list) {
+        if(list[emotion] > max) {
+            max = list[emotion];
+            genre = emotion;
+        }
+    };
+
+    let query = encodeURIComponent(genre);
+    fetch('/api/spotify?q=' + query)
+    .then(response => {
+        return response.json();
+    })
+    .then(json => {
+        console.log(json);
+    });
+}
+
 imageForm.addEventListener('submit', (e) => {
     
     e.preventDefault();
@@ -20,10 +41,8 @@ imageForm.addEventListener('submit', (e) => {
     imageContainer.style.backgroundImage = "url(" + query + ")"
 
     let params = {
-        'returnFaceAttributes': 'gender,emotion'
+        returnFaceAttributes: 'gender,emotion'
     };
-
-    console.log($.param(params));
 
     $.ajax({
         
@@ -50,6 +69,7 @@ imageForm.addEventListener('submit', (e) => {
         neutral.innerHTML = data[0].faceAttributes.emotion.neutral;
         sadness.innerHTML = data[0].faceAttributes.emotion.sadness;
         surprise.innerHTML = data[0].faceAttributes.emotion.surprise;
+        findMax(data);
     })
     .fail((jqXHR, textStatus, errorThrown) => {
         console.log(errorThrown);
